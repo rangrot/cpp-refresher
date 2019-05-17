@@ -80,6 +80,45 @@ void catch_basic_exceptions()
   }
 }
 
+// global variable to catch user input
+int num;
+
+/**
+ * @brief Class Will_go_wrong
+ * Allocates a absurdly huge memory which should trigger a standard cpp exception from the constructor.
+ */
+class Will_go_wrong
+{
+public:
+
+  // Standard cpp exceptions can be used to catch memory allocation and other issues in constructors etc.
+  Will_go_wrong()
+  {
+    // The compiler won't allow me to allocate directly a huge number in the array
+    // So I take the user input in num and pass it along here, the compiler doesn't know s**t what happens at run time.
+    char *p_memory = new char[num];
+    delete[] p_memory;
+  }
+};
+
+/**
+ * @brief Test will_go_wrong class
+ * 
+ */
+void test_will_go_wrong()
+{
+  cout << "enter a absurdly large number to allocate memory" << endl;
+  cin >> num;
+  try
+  {
+    Will_go_wrong wrong;
+  }
+  catch (bad_alloc &e)
+  {
+    cout << "Exception caught" << e.what() << endl;
+  }
+}
+
 /**
  * @brief main
  *
@@ -87,6 +126,9 @@ void catch_basic_exceptions()
  */
 int main()
 {
-  catch_basic_exceptions();
+  //catch_basic_exceptions();
+
+  test_will_go_wrong();
+  cout << "Program End!" << endl;
   return 0;
 }
